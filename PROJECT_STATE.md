@@ -2,96 +2,97 @@
 
 ## Purpose
 
-ExactArtifact is a small local-first file-integrity utility for proving that files and release directories contain exactly the expected bytes.
+ExactArtifact is a small local-first Windows file-integrity utility for proving that files and release directories contain exactly the expected bytes.
 
 ## Portfolio role
 
 Focused Project: small, finished, intentional, and easy to understand.
 
-## Scope for 1.0
+## 1.0 milestones
 
-EA-01: Streaming SHA-256 core, CLI, and tests.
-EA-02: Deterministic manifest creation and verification plus defensive file handling.
-EA-03: Small polished Windows GUI.
-EA-04: Benchmarking, documentation, release validation, and packaging.
-EA-1.0: Publish repository, release, and portfolio entry.
+EA-01: Streaming SHA-256 core, CLI, and tests. COMPLETE.
+EA-02: Deterministic manifest creation and verification plus defensive file handling. COMPLETE.
+EA-03: Lightweight native Windows GUI. COMPLETE.
+EA-04: Benchmarking, documentation, packaging, and release validation. COMPLETE.
+EA-1.0: GitHub publication, release upload, and portfolio entry. NOT YET PUBLISHED.
 
-## Non-goals for 1.0
-
-Cloud storage, accounts, AI, databases, malware scanning, antivirus functionality, synchronization, encryption platforms, automatic updates, or large settings systems.
-
-## Architecture
-
-- ExactArtifact.Core: shared hashing and manifest logic.
-- ExactArtifact.Cli: command-line interface consuming Core.
-- ExactArtifact.Tests: independent tests of Core.
-- Future GUI: consumes the same Core library.
-
-## Engineering principles
-
-- Stream files rather than loading them fully into memory.
-- Memory use must not meaningfully scale with file size.
-- Keep manifest output deterministic.
-- Keep paths portable and relative.
-- Reject manifest path traversal.
-- Detect obvious file mutation during hashing.
-- Keep behavior automation-friendly.
-- Keep 1.0 scope disciplined.
-
-## Current milestone
-
-EA-02 COMPLETE.
-
-## EA-01 completed
+## Core capabilities
 
 - Streaming SHA-256
-- Single-file hash and verify commands
-- SHA-256 normalization and validation
-- Script-friendly exit codes
-- Local automated tests
-
-## EA-02 completed
-
+- Expected hash verification
+- Strict normalized SHA-256 validation
+- Cancellation
+- File mutation checks
 - Deterministic JSON manifests
-- Canonical forward-slash relative paths
-- Stable ordinal file ordering
-- File byte sizes and SHA-256 values
-- Self-exclusion when manifest is stored inside target directory
-- Directory verification
+- Canonical relative paths
+- Stable ordering
+- Self-excluding manifests
 - Matched / modified / missing / unexpected classification
-- Safe manifest path resolution
-- Rejection of path traversal outside verification root
-- Reparse-point exclusion during recursive enumeration
-- File length and modification-time checks around hashing
-- CLI manifest create command
-- CLI manifest verify command
-- Dedicated manifest mismatch exit code 4
-- Repeated-output determinism smoke validation
+- Path traversal rejection
+- Reparse-point exclusion
+- Script-friendly exit codes
 
-## Validation
+## Interfaces
 
-Last validated locally: 2026-09-11 04:55:53 +09:00
+- ExactArtifact.Gui: native WPF GUI
+- ExactArtifact.Cli: automation-friendly CLI
+- Both consume ExactArtifact.Core
 
-Release build: PASS
-Automated tests: 20/20 PASS
-Single-file CLI behavior: retained from EA-01
-Manifest create: PASS
-Repeated manifest byte determinism: PASS
-Manifest exact verification: PASS
-Manifest mismatch detection: PASS
-GitHub operations: NONE
+## Local validation
 
-## GitHub policy
+Validated: 2026-09-11 05:19:47 +09:00
 
-Normal development and validation remain local.
-No GitHub Actions are required during development.
-Publication happens only when locally release-ready.
-Initial CI, if added, should use manual workflow_dispatch.
+Release solution build: PASS
+Automated tests: 22/22 PASS
+Single-file CLI regression: PASS
+Manifest regression: PASS
+Development GUI launch: PASS
+Self-contained release GUI launch: PASS
+Clean ZIP extraction GUI launch: PASS
+Clean ZIP extraction CLI smoke test: PASS
 
-## Next milestone
+## Benchmark
 
-EA-03: small polished Windows GUI using the existing Core library.
+64 MiB:
+- Time: 0.115 s
+- Throughput: 554.7 MiB/s
+- Peak working set: 25.9 MiB
+
+512 MiB:
+- Time: 0.4 s
+- Throughput: 1280.1 MiB/s
+- Peak working set: 29.5 MiB
+
+Input-size increase: 8x
+Peak-working-set change: 3.6 MiB
+
+## Release packaging decision
+
+Version 1.0.0 uses:
+
+- GUI: self-contained multi-file win-x64 publish
+- CLI: self-contained single-file win-x64 publish
+
+The GUI single-file publish path was tested and rejected because it exited immediately under the current .NET 10 WPF SDK. The conservative multi-file self-contained GUI package was then validated from both the publish directory and a clean extracted ZIP.
+
+## Local release candidate
+
+ZIP: artifacts/release/ExactArtifact-1.0.0-win-x64.zip
+ZIP SHA-256: 85ea37266d726e7c43487fa2da9b493428be001fbb3c616ec6742180268cd66a
+ZIP size: 90.7 MiB
 
 ## GitHub status
 
-No GitHub operation was performed by EA-02.
+No GitHub Actions were used.
+No GitHub publication has happened yet.
+
+## Next milestone
+
+EA-1.0 publication only:
+
+1. Review local release candidate.
+2. Publish repository.
+3. Publish v1.0.0 release using tested ZIP and SHA256SUMS.txt.
+4. Optionally add manual-only CI later.
+5. Add ExactArtifact to portfolio Focused Projects.
+6. Stop 1.0 feature development.

@@ -1,10 +1,51 @@
 # ExactArtifact
 
-A small local-first utility for proving that a file or release directory is exactly what you expected.
+ExactArtifact is a small local-first Windows utility for proving that a file or release directory contains exactly the bytes you expected.
 
-ExactArtifact uses streaming SHA-256 hashing so large files do not need to be loaded fully into memory.
+It provides both a native Windows interface and a script-friendly CLI. Both use the same shared integrity engine.
 
-## Commands
+## What it does
+
+### Single files
+
+- Stream SHA-256 without loading the entire file into memory
+- Copy the calculated hash
+- Compare against an expected SHA-256
+- Normalize uppercase, lowercase, spaced, or hyphenated SHA-256 input
+- Cancel long-running GUI operations
+- Detect obvious file mutation around the hashing operation
+
+### Release folders
+
+ExactArtifact creates deterministic JSON manifests containing:
+
+- canonical relative path
+- byte size
+- SHA-256
+
+Verification classifies files as matched, modified, missing, or unexpected.
+
+Generated manifests intentionally omit timestamps, machine names, absolute paths, and other environment-specific metadata. Entries are sorted deterministically and the manifest excludes itself when stored inside the target directory.
+
+Manifest path traversal outside the selected root is rejected.
+
+## Windows app
+
+Run:
+
+`ExactArtifact.exe`
+
+The Windows x64 release is self-contained, so users do not need to install .NET.
+
+The GUI is intentionally shipped as a self-contained multi-file application rather than a WPF single-file bundle because of a current upstream .NET 10 WPF single-file startup regression.
+
+## CLI
+
+The portable CLI is:
+
+`cli\exactartifact.exe`
+
+Usage:
 
 ```powershell
 exactartifact hash <file>
@@ -14,39 +55,51 @@ exactartifact manifest create <directory> <manifest-file>
 exactartifact manifest verify <directory> <manifest-file>
 ```
 
-## Manifest design
+Exit codes:
 
-ExactArtifact manifests are deterministic JSON.
+| Code | Meaning |
+| ---: | --- |
+| 0 | Success / exact match |
+| 1 | Invalid input or operational error |
+| 2 | Cancelled |
+| 3 | Single-file hash mismatch |
+| 4 | Manifest mismatch |
 
-They contain only the data required to identify the files:
+## Architecture
 
-- relative path
-- byte size
-- SHA-256
+```text
+ExactArtifact.Gui ─┐
+                   ├─> ExactArtifact.Core
+ExactArtifact.Cli ─┘
 
-Entries are sorted by canonical relative path. Generated manifests contain no timestamps, machine names, absolute paths, or other environment-specific data.
+ExactArtifact.Tests ─> ExactArtifact.Core
+```
 
-If the manifest is stored inside the directory being described, the manifest excludes itself.
+Integrity logic stays in `ExactArtifact.Core`. The GUI and CLI are thin interfaces over the same implementation.
 
-Manifest verification reports:
-
-- matched files
-- modified files
-- missing files
-- unexpected files
-
-Manifest paths are constrained to the target directory so a malicious or malformed manifest cannot escape the verification root with `..` traversal.
-
-## Design goals
+## Engineering goals
 
 - Small and understandable
 - Local-first
-- Predictable memory usage
+- Predictable memory use
 - Deterministic output
-- Useful from both humans and scripts
-- Strong validation and tests
+- Defensive path handling
+- Automation-friendly CLI behavior
 - No unnecessary dependencies
 
-## Status
+## Build locally
 
-EA-02.
+Requires the .NET 10 SDK.
+
+```powershell
+dotnet build ExactArtifact.slnx --configuration Release
+dotnet test tests\ExactArtifact.Tests\ExactArtifact.Tests.csproj --configuration Release
+```
+
+## Benchmark
+
+See `docs/BENCHMARK.md`.
+
+## License
+
+MIT.
