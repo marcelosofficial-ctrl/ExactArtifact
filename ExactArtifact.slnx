@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ExactArtifact.Cli/ExactArtifact.Cli.csproj" />
+    <Project Path="src/ExactArtifact.Core/ExactArtifact.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ExactArtifact.Tests/ExactArtifact.Tests.csproj" />
+  </Folder>
+</Solution>
