@@ -6,11 +6,8 @@ public static class HashVerifier
         string calculatedHash,
         string expectedHash)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(calculatedHash);
-        ArgumentException.ThrowIfNullOrWhiteSpace(expectedHash);
-
-        var calculated = Normalize(calculatedHash);
-        var expected = Normalize(expectedHash);
+        var calculated = NormalizeSha256(calculatedHash);
+        var expected = NormalizeSha256(expectedHash);
 
         return string.Equals(
             calculated,
@@ -18,11 +15,22 @@ public static class HashVerifier
             StringComparison.OrdinalIgnoreCase);
     }
 
-    private static string Normalize(string hash)
+    public static string NormalizeSha256(string hash)
     {
-        return hash
+        ArgumentException.ThrowIfNullOrWhiteSpace(hash);
+
+        var normalized = hash
             .Trim()
             .Replace(" ", string.Empty)
             .Replace("-", string.Empty);
+
+        if (normalized.Length != 64 ||
+            !normalized.All(Uri.IsHexDigit))
+        {
+            throw new FormatException(
+                "A SHA-256 hash must contain exactly 64 hexadecimal characters.");
+        }
+
+        return normalized.ToLowerInvariant();
     }
 }

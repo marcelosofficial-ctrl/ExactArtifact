@@ -37,4 +37,48 @@ public sealed class FileHasherTests
                     Path.GetTempPath(),
                     Guid.NewGuid().ToString())));
     }
+
+    [Fact]
+    public async Task ComputeSha256Async_EmptyFile_ReturnsKnownHash()
+    {
+        var path = Path.GetTempFileName();
+
+        try
+        {
+            await File.WriteAllBytesAsync(path, []);
+
+            var hasher = new FileHasher();
+            var result = await hasher.ComputeSha256Async(path);
+
+            Assert.Equal(
+                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                result);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public async Task ComputeDetailedAsync_ReturnsLengthAndHash()
+    {
+        var path = Path.GetTempFileName();
+
+        try
+        {
+            var bytes = new byte[] { 1, 2, 3, 4, 5 };
+            await File.WriteAllBytesAsync(path, bytes);
+
+            var hasher = new FileHasher();
+            var result = await hasher.ComputeDetailedAsync(path);
+
+            Assert.Equal(5, result.Length);
+            Assert.Equal(64, result.Sha256.Length);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
 }
