@@ -14,7 +14,7 @@ EA-01: Streaming SHA-256 core, CLI, and tests. COMPLETE.
 EA-02: Deterministic manifest creation and verification plus defensive file handling. COMPLETE.
 EA-03: Lightweight native Windows GUI. COMPLETE.
 EA-04: Benchmarking, documentation, packaging, and release validation. COMPLETE.
-EA-1.0: GitHub publication, release upload, and portfolio entry. NOT YET PUBLISHED.
+EA-1.0: GitHub publication, release upload, and portfolio entry. COMPLETE.
 
 ## Core capabilities
 
@@ -75,24 +75,25 @@ Version 1.0.0 uses:
 
 The GUI single-file publish path was tested and rejected because it exited immediately under the current .NET 10 WPF SDK. The conservative multi-file self-contained GUI package was then validated from both the publish directory and a clean extracted ZIP.
 
-## Local release candidate
+## Published release
 
-ZIP: artifacts/release/ExactArtifact-1.0.0-win-x64.zip
+Release: https://github.com/marcelosofficial-ctrl/ExactArtifact/releases/tag/v1.0.0
+ZIP: ExactArtifact-1.0.0-win-x64.zip
 ZIP SHA-256: 85ea37266d726e7c43487fa2da9b493428be001fbb3c616ec6742180268cd66a
 ZIP size: 90.7 MiB
 
 ## GitHub status
 
-No GitHub Actions were used.
-No GitHub publication has happened yet.
+Public repository: https://github.com/marcelosofficial-ctrl/ExactArtifact
+Public release: v1.0.0
+Release asset: ExactArtifact-1.0.0-win-x64.zip
+Release ZIP SHA-256: 85ea37266d726e7c43487fa2da9b493428be001fbb3c616ec6742180268cd66a
+Portfolio case study: https://marcelosofficial-ctrl.github.io/portfolio/projects/exactartifact/
 
-## Next milestone
+The public repository and v1.0.0 release are live. The validated 22/22-test release boundary remains the 1.0 evidence baseline.
 
-EA-1.0 publication only:
+## Current maintenance state
 
-1. Review local release candidate.
-2. Publish repository.
-3. Publish v1.0.0 release using tested ZIP and SHA256SUMS.txt.
-4. Optionally add manual-only CI later.
-5. Add ExactArtifact to portfolio Focused Projects.
-6. Stop 1.0 feature development.
+ExactArtifact 1.0.0 is released and feature-complete for its current focused-tool scope.
+
+Future work should be driven by a real artifact-integrity need or optional RevDev/Dev Relay provider integration rather than expanding 1.0 for its own sake.
