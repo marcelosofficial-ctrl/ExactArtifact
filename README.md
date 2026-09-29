@@ -4,6 +4,18 @@ ExactArtifact is a small local-first Windows utility for proving that a file or 
 
 It provides both a native Windows interface and a script-friendly CLI. Both use the same shared integrity engine.
 
+## Download
+
+Current Windows release: **ExactArtifact 1.0.0**
+
+- [Download ExactArtifact 1.0.0](https://github.com/marcelosofficial-ctrl/ExactArtifact/releases/tag/v1.0.0)
+- Release ZIP: `ExactArtifact-1.0.0-win-x64.zip`
+- SHA-256: `85ea37266d726e7c43487fa2da9b493428be001fbb3c616ec6742180268cd66a`
+- [Portfolio case study](https://marcelosofficial-ctrl.github.io/portfolio/projects/exactartifact/)
+
+The ZIP contains the self-contained Windows GUI plus the script-friendly CLI.
+
+
 ## What it does
 
 ### Single files
